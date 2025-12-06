@@ -1,37 +1,30 @@
 package com.employee.punch.ui.components
 
-import android.content.Context
-import android.graphics.Color as AndroidColor
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.employee.punch.ui.theme.ChartBlue
 import com.employee.punch.ui.theme.ChartGreen
-import com.employee.punch.ui.theme.ChartYellow
 import com.employee.punch.ui.theme.ChartRed
+import com.employee.punch.ui.theme.ChartYellow
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import android.graphics.Color as AndroidColor
 
-/**
- * values: list of floats for segments (order preserved)
- * labels: optional labels corresponding to values (same size)
- * size: chart size
- */
 @Composable
 fun DonutChartReal(
     values: List<Float>,
     labels: List<String>? = null,
     modifier: Modifier = Modifier,
-    size: Dp = 160.dp
+    size: Dp = 200.dp
 ) {
     val ctx = LocalContext.current
 
@@ -57,7 +50,7 @@ fun DonutChartReal(
                 setHoleColor(AndroidColor.TRANSPARENT)
                 setEntryLabelColor(AndroidColor.BLACK)
                 setEntryLabelTextSize(12f)
-                setDrawEntryLabels(false) // we handle labels with legend or center text
+                setDrawEntryLabels(false)
                 setDrawCenterText(true)
                 setCenterTextSize(14f)
                 setCenterTextColor(AndroidColor.DKGRAY)

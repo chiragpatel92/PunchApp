@@ -71,5 +71,6 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
     implementation(libs.mpandroidchart)
+    implementation(libs.coil.compose)
 
 }

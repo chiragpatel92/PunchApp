@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,31 +21,27 @@ import com.employee.punch.navigation.Routes
 
 @Composable
 fun FreezeOverlay(navController: NavController) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xAA000000)),   // dim background
+            .background(Color(0x99000000)),
         contentAlignment = Alignment.Center
     ) {
-
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
             Text(
-                text = "Punch Required!",
+                text = "Punch Required",
                 color = Color.White,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineSmall
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-            
+
             Box(
                 modifier = Modifier
-                    .background(Color(0xFFFF4444), MaterialTheme.shapes.medium)
-                    .clickable {
-                        navController.navigate(Routes.PUNCH)
-                    }
-                    .padding(horizontal = 24.dp, vertical = 12.dp)
+                    .background(Color(0xFFE53935), RoundedCornerShape(10.dp))
+                    .clickable { navController.navigate(Routes.PUNCH) }
+                    .padding(horizontal = 28.dp, vertical = 14.dp)
             ) {
                 Text(
                     text = "Punch Now",
@@ -55,3 +52,4 @@ fun FreezeOverlay(navController: NavController) {
         }
     }
 }
+

@@ -24,7 +24,6 @@ import com.employee.punch.ui.components.ScreenContainer
 import com.employee.punch.ui.components.ScreenTitle
 import com.employee.punch.util.showToast
 
-@Preview
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -42,7 +41,7 @@ fun LoginScreen(
         ) {
             ScreenTitle("Welcome")
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             PrimaryTextField(
                 value = username,

@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.employee.punch.R
 
-private val Lato = FontFamily(
+val Lato = FontFamily(
     Font(R.font.lato_regular, FontWeight.Normal),
     Font(R.font.lato_medium, FontWeight.Medium),
     Font(R.font.lato_bold, FontWeight.Bold)

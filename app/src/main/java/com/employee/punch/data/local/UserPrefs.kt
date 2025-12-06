@@ -10,6 +10,7 @@ class UserPrefs(context: Context) {
 
     companion object {
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
+        private const val KEY_LAST_PUNCH_TIME = "last_punch_time"
     }
 
     fun setLoggedIn(value: Boolean) {
@@ -23,4 +24,14 @@ class UserPrefs(context: Context) {
     fun logout() {
         prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply()
     }
+
+    fun setLastPunchTime(time: Long) {
+        prefs.edit().putLong(KEY_LAST_PUNCH_TIME, time).apply()
+    }
+
+    fun getLastPunchTime(): Long {
+        return prefs.getLong(KEY_LAST_PUNCH_TIME, 0L)
+    }
+
+
 }

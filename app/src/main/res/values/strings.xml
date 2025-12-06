@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EmployeePunch</string>
+    <string name="MAP_API_KEY">AIzaSyCmvlBUNutEfIojYbW52LVM7FrH_-cNM1Q</string>
 </resources>

@@ -5,4 +5,5 @@ object Routes {
     const val HOME = "home"
     const val PUNCH = "punch"
     const val ROUTE = "route"
+    const val SELECT_PUNCHES = "selectPunches"
 }

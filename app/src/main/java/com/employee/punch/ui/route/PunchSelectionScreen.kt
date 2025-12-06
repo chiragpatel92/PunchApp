@@ -89,7 +89,7 @@ fun PunchSelectionScreen(
                             modifier = Modifier
                                 .height(80.dp)
                                 .weight(1f)
-                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))  // clip corners
+                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
                         )
 
                         Spacer(modifier = Modifier.width(16.dp))

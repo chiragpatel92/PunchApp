@@ -21,7 +21,6 @@ class PunchViewModel(application: Application) : AndroidViewModel(application) {
                 time = System.currentTimeMillis()
             )
 
-            // Reset timer after punch
             PunchTimerManager.resetTimer()
             onSuccess()
         }

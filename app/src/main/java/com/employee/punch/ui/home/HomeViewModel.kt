@@ -24,7 +24,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun loadWeeklyCounts() {
         viewModelScope.launch {
-            val punches = repo.getAllPunches() // returns all punches (most recent first)
+            val punches = repo.getAllPunches()
             _weeklyCounts.value = computeLast7DaysCounts(punches)
         }
     }

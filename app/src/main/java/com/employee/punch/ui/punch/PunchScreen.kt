@@ -83,7 +83,7 @@ fun PunchScreen(navController: NavController, vm: PunchViewModel = viewModel()) 
                     GoogleMap(
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp)),   // Rounded border
+                            .clip(RoundedCornerShape(16.dp)),
                         cameraPositionState = cameraPositionState,
                         properties = MapProperties(
                             mapType = MapType.NORMAL

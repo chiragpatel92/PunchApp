@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -23,10 +22,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -55,14 +61,22 @@ fun HomeScreen(
         (navController.context as? android.app.Activity)?.finish()
     }
 
+    var punchButtonRect by remember { mutableStateOf<Rect?>(null) }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+        ) {
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                    .padding(vertical = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -74,7 +88,6 @@ fun HomeScreen(
                 Text(
                     text = "Logout",
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.clickable {
                         prefs.logout()
                         PunchTimerManager.stopTimer()
@@ -85,114 +98,91 @@ fun HomeScreen(
                 )
             }
 
-            HomeContent(
-                navController = navController,
-                remaining = remaining,
-                isWarning = isWarning,
-                weekly = weekly
-            )
-        }
-
-        if (isPunchRequired) {
-            FreezeOverlay(navController)
-        }
-    }
-}
-
-@Composable
-fun HomeContent(
-    navController: NavController,
-    remaining: Long,
-    isWarning: Boolean,
-    weekly: List<Float>
-) {
-    val minutes = (remaining / 1000) / 60
-    val seconds = (remaining / 1000) % 60
-    val highlightColor =
-        if (isWarning) Color(0xFFFF9800) else MaterialTheme.colorScheme.primary
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-
-        item {
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(3.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
-                ),
-                elevation = CardDefaults.cardElevation(4.dp),
-                shape = RoundedCornerShape(16.dp)
+                )
             ) {
+
+                val minutes = (remaining / 1000) / 60
+                val seconds = (remaining / 1000) % 60
+                val color = if (isWarning) Color(0xFFFF9800)
+                else MaterialTheme.colorScheme.primary
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 24.dp, horizontal = 20.dp),
+                        .padding(22.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Next Punch In",
-                        style = MaterialTheme.typography.titleMedium,
-                    )
+                    Text("Next Punch In", style = MaterialTheme.typography.titleMedium)
 
                     Text(
-                        text = "%02d:%02d".format(minutes, seconds),
+                        "%02d:%02d".format(minutes, seconds),
                         style = MaterialTheme.typography.headlineLarge.copy(
-                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                            fontWeight = FontWeight.Bold
                         ),
-                        color = highlightColor
+                        color = color
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(26.dp))
-        }
-
-        item {
+            Spacer(modifier = Modifier.height(24.dp))
 
             Card(
-                modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                elevation = CardDefaults.cardElevation(4.dp),
-                shape = RoundedCornerShape(16.dp)
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(3.dp)
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 20.dp)
+                        .padding(20.dp)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Weekly Activity",
+                        "Weekly Activity",
                         style = MaterialTheme.typography.titleMedium
                     )
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    DonutChartReal(values = weekly)
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        DonutChartReal(values = weekly)
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(26.dp))
-        }
 
-        item {
+            Spacer(modifier = Modifier.height(24.dp))
 
-            PrimaryButton(
-                text = "Punch Now",
-                icon = Icons.Default.PlayArrow,
-                onClick = { navController.navigate(Routes.PUNCH) }
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coords ->
+                        punchButtonRect = coords.boundsInParent()
+                    }
+            ) {
+                PrimaryButton(
+                    text = "Punch Now",
+                    icon = Icons.Default.PlayArrow,
+                    onClick = {
+                        navController.navigate(Routes.PUNCH)
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -203,11 +193,10 @@ fun HomeContent(
                 contentColor = PrimaryDark,
                 onClick = { navController.navigate(Routes.SELECT_PUNCHES) }
             )
+        }
 
-            Spacer(modifier = Modifier.height(20.dp))
+        if (isPunchRequired) {
+            FreezeOverlay(punchButtonRect)
         }
     }
 }
-
-
-
